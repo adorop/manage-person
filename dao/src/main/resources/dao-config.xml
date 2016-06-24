@@ -3,13 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="physicalNamingStrategy" class="by.it.academy.adorop.dao.utils.CustomNamingStrategy"/>
+    <!--<bean id="physicalNamingStrategy" class="by.it.academy.adorop.dao.utils.CustomNamingStrategy"/>-->
 
-    <bean id="configuration" class="org.hibernate.cfg.Configuration" init-method="configure">
-        <property name="physicalNamingStrategy" ref="physicalNamingStrategy"/>
-    </bean>
+    <!--<bean id="configuration" class="org.hibernate.cfg.Configuration" init-method="configure">-->
+        <!--<property name="physicalNamingStrategy" ref="physicalNamingStrategy"/>-->
+    <!--</bean>-->
 
-    <bean id="sessionFactory" factory-bean="configuration" factory-method="buildSessionFactory" destroy-method="close"/>
+    <bean id="sessionFactoryBuilder" class="by.it.academy.adorop.dao.utils.SessionFactoryBuilder"/>
+
+    <bean id="sessionFactory" factory-bean="sessionFactoryBuilder" factory-method="buildSessionFactory" destroy-method="close"/>
 
     <bean id="session" factory-bean="sessionFactory" factory-method="openSession" destroy-method="close"/>
 
@@ -17,7 +19,7 @@
         <property name="session" ref="session"/>
     </bean>
 
-    <bean id="studentDAO" class="by.it.academy.adorop.dao.StudentDAO" parent="basicDAO" scope="singleton"/>
+    <bean id="studentDAO" class="by.it.academy.adorop.dao.StudentDAO" parent="basicDAO"/>
     <bean id="addressDAO" class="by.it.academy.adorop.dao.AddressDAO" parent="basicDAO"/>
     <bean id="departmentDAO" class="by.it.academy.adorop.dao.DepartmentDAO" parent="basicDAO"/>
     <bean id="employeeDAO" class="by.it.academy.adorop.dao.EmployeeDAO" parent="basicDAO"/>
