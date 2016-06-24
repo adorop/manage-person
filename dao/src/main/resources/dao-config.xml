@@ -3,13 +3,36 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--<bean id="physicalNamingStrategy" class="by.it.academy.adorop.dao.utils.CustomNamingStrategy"/>-->
 
-    <!--<bean id="configuration" class="org.hibernate.cfg.Configuration" init-method="configure">-->
-        <!--<property name="physicalNamingStrategy" ref="physicalNamingStrategy"/>-->
-    <!--</bean>-->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="db.properties"/>
+    </bean>
 
-    <bean id="sessionFactoryBuilder" class="by.it.academy.adorop.dao.utils.SessionFactoryBuilder"/>
+    <bean id="physicalNamingStrategy" class="by.it.academy.adorop.dao.utils.CustomNamingStrategy"/>
+
+    <bean id="sessionFactoryBuilder" class="by.it.academy.adorop.dao.utils.SessionFactoryBuilder">
+        <property name="mappingResources">
+            <set value-type="java.lang.String">
+                <value>address.hbm.xml</value>
+                <value>department.hbm.xml</value>
+                <value>global.hbm.xml</value>
+                <value>person.hbm.xml</value>
+            </set>
+        </property>
+        <property name="hibernateSettings">
+            <props>
+                <prop key="hibernate.dialect">${dialect}</prop>
+                <prop key="hibernate.connection.driver_class">${driver}</prop>
+                <prop key="hibernate.connection.url">${url}</prop>
+                <prop key="hibernate.connection.username">${username}</prop>
+                <prop key="hibernate.connection.password">${password}</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+            </props>
+        </property>
+        <property name="physicalNamingStrategy" ref="physicalNamingStrategy"/>
+    </bean>
 
     <bean id="sessionFactory" factory-bean="sessionFactoryBuilder" factory-method="buildSessionFactory" destroy-method="close"/>
 

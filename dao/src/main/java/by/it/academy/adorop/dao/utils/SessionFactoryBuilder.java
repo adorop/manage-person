@@ -4,48 +4,72 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataBuilder;
 import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SessionFactoryBuilder {
 
+    private Properties hibernateSettings;
+    private Collection<String> mappingResources;
+    private PhysicalNamingStrategy physicalNamingStrategy;
+
     public SessionFactory buildSessionFactory() {
-        StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder();
-        serviceRegistryBuilder.applySettings(getSettings());
-        ServiceRegistry serviceRegistry = serviceRegistryBuilder.build();
-
-        MetadataSources metadataSources = new MetadataSources(serviceRegistry);
-        setup(metadataSources);
-
-        MetadataBuilder metadataBuilder = metadataSources.getMetadataBuilder();
-        metadataBuilder.applyPhysicalNamingStrategy(new CustomNamingStrategy());
-        Metadata metadata = metadataBuilder.build();
-
+        ServiceRegistry serviceRegistry = buildServiceRegistry();
+        MetadataSources metadataSources = setupMetadataSources(serviceRegistry);
+        Metadata metadata = buildMetadata(metadataSources);
         return metadata.buildSessionFactory();
     }
 
-    private void setup(MetadataSources metadataSources) {
-        metadataSources.addResource("address.hbm.xml");
-        metadataSources.addResource("department.hbm.xml");
-        metadataSources.addResource("global.hbm.xml");
-        metadataSources.addResource("person.hbm.xml");
-//        metadataSources.addJar(new File(""));
+    public void setHibernateSettings(Properties hibernateSettings) {
+        this.hibernateSettings = hibernateSettings;
     }
 
-    private Map getSettings() {
+    public void setMappingResources(Collection<String> mappingResources) {
+        this.mappingResources = mappingResources;
+    }
+
+    public void setPhysicalNamingStrategy(PhysicalNamingStrategy physicalNamingStrategy) {
+        this.physicalNamingStrategy = physicalNamingStrategy;
+    }
+
+    private Metadata buildMetadata(MetadataSources metadataSources) {
+        MetadataBuilder metadataBuilder = metadataSources.getMetadataBuilder();
+        if (physicalNamingStrategy != null) {
+            metadataBuilder.applyPhysicalNamingStrategy(physicalNamingStrategy);
+        }
+        return metadataBuilder.build();
+    }
+
+    private MetadataSources setupMetadataSources(ServiceRegistry serviceRegistry) {
+        MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+        setup(metadataSources);
+        return metadataSources;
+    }
+
+    private ServiceRegistry buildServiceRegistry() {
+        StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder();
+        serviceRegistryBuilder.applySettings(getHibernateSettings());
+
+        return serviceRegistryBuilder.build();
+    }
+
+    private void setup(MetadataSources metadataSources) {
+        for (String resource : mappingResources) {
+            metadataSources.addResource(resource);
+        }
+    }
+
+    private Map getHibernateSettings() {
         Map<String, String> settings = new HashMap<>();
-        settings.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        settings.put("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        settings.put("hibernate.connection.url", "jdbc:mysql://localhost:3306/manage_person");
-        settings.put("hibernate.connection.username", "root");
-        settings.put("hibernate.connection.password", "1234");
-        settings.put("hibernate.show_sql", "true");
-        settings.put("hibernate.format_sql", "true");
-        settings.put("hibernate.hbm2ddl.auto", "create-drop");
+
+        Enumeration<?> propertyNames = hibernateSettings.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String propertyName = (String) propertyNames.nextElement();
+            settings.put(propertyName, hibernateSettings.getProperty(propertyName));
+        }
         return settings;
     }
 }
