@@ -1,7 +1,6 @@
 package by.it.academy.adorop.dao;
 
 import by.it.academy.adorop.dao.exceptions.DaoException;
-import by.it.academy.adorop.dao.utils.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -17,8 +16,8 @@ public abstract class BasicDAO<T> implements DAO<T> {
     Session session;
     Transaction transaction;
 
-    BasicDAO() {
-        session = HibernateUtil.getSession();
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -29,8 +28,10 @@ public abstract class BasicDAO<T> implements DAO<T> {
             transaction.commit();
             return object;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error(e);
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new DaoException();
         }
     }
@@ -38,6 +39,7 @@ public abstract class BasicDAO<T> implements DAO<T> {
     @Override
     public T get(Serializable id) throws DaoException {
         try {
+            System.out.println(session);
             transaction = session.beginTransaction();
             T retrievedObject = (T) session.get(getPersistentClass(), id);
             transaction.commit();

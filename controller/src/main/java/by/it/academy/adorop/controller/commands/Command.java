@@ -2,7 +2,6 @@ package by.it.academy.adorop.controller.commands;
 
 import by.it.academy.adorop.controller.commands.exceptions.NoSuchEntityException;
 import by.it.academy.adorop.dao.DAO;
-import by.it.academy.adorop.dao.PersonDAO;
 import by.it.academy.adorop.dao.exceptions.DaoException;
 import org.apache.log4j.Logger;
 

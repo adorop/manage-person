@@ -2,20 +2,24 @@ package by.it.academy.adorop.controller.commands;
 
 import by.it.academy.adorop.controller.commands.exceptions.NoSuchEntityException;
 import by.it.academy.adorop.dao.DAO;
-import by.it.academy.adorop.dao.DepartmentDAO;
-import by.it.academy.adorop.dao.EmployeeDAO;
 import by.it.academy.adorop.dao.exceptions.DaoException;
 import by.it.academy.adorop.entities.Department;
 import by.it.academy.adorop.entities.Employee;
 
-import java.io.Serializable;
-
-import static by.it.academy.adorop.controller.utils.InputReader.*;
+import static by.it.academy.adorop.controller.utils.InputReader.readInteger;
 
 public class AddEmployeeToDepartmentCommand extends Command {
 
-    private DAO<Employee> employeeDAO = EmployeeDAO.getInstance();
-    private DAO<Department> departmentDAO = DepartmentDAO.getInstance();
+    private DAO<Employee> employeeDAO;
+    private DAO<Department> departmentDAO;
+
+    public void setEmployeeDAO(DAO<Employee> employeeDAO) {
+        this.employeeDAO = employeeDAO;
+    }
+
+    public void setDepartmentDAO(DAO<Department> departmentDAO) {
+        this.departmentDAO = departmentDAO;
+    }
 
     @Override
     public void execute() {

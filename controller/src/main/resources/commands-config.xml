@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+
+    <import resource="dao-config.xml"/>
+
+    <bean id="saveStudentCommand" class="by.it.academy.adorop.controller.commands.SaveCommand" scope="prototype">
+        <constructor-arg value="#{T(java.lang.Class).forName('by.it.academy.adorop.entities.Student')}" />
+        <constructor-arg ref="studentDAO"/>
+    </bean>
+
+    <bean id="saveEmployeeCommand" class="by.it.academy.adorop.controller.commands.SaveCommand" scope="prototype">
+        <constructor-arg value="#{T(java.lang.Class).forName('by.it.academy.adorop.entities.Employee')}"/>
+        <constructor-arg ref="employeeDAO"/>
+    </bean>
+
+    <bean id="saveDepartmentCommand" class="by.it.academy.adorop.controller.commands.SaveCommand" scope="prototype">
+        <constructor-arg value="#{T(java.lang.Class).forName('by.it.academy.adorop.entities.Department')}"/>
+        <constructor-arg ref="departmentDAO"/>
+    </bean>
+
+    <bean id="findStudentCommand" class="by.it.academy.adorop.controller.commands.FindCommand" scope="prototype">
+        <constructor-arg ref="studentDAO"/>
+    </bean>
+
+    <bean id="findEmployeeCommand" class="by.it.academy.adorop.controller.commands.FindCommand" scope="prototype">
+        <constructor-arg ref="employeeDAO"/>
+    </bean>
+
+    <bean id="findDepartmentCommand" class="by.it.academy.adorop.controller.commands.FindCommand" scope="prototype">
+        <constructor-arg ref="departmentDAO"/>
+    </bean>
+
+    <bean id="addEmployeeToDepartmentCommand"
+          class="by.it.academy.adorop.controller.commands.AddEmployeeToDepartmentCommand"
+          scope="prototype"/>
+
+    <bean id="deleteEmployeeFromDepartmentCommand"
+          class="by.it.academy.adorop.controller.commands.DeleteEmployeeFromDepartmentCommand" scope="prototype"/>
+
+    <bean id="addAddressCommand" class="by.it.academy.adorop.controller.commands.AddAddressCommand" scope="prototype"/>
+
+    <bean id="exitCommand" class="by.it.academy.adorop.controller.commands.ExitCommand"/>
+
+    <bean id="showMenuCommand" class="by.it.academy.adorop.controller.commands.ShowMenuCommand"/>
+
+</beans>

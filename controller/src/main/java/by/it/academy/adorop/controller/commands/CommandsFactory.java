@@ -1,15 +1,20 @@
 package by.it.academy.adorop.controller.commands;
 
-import by.it.academy.adorop.dao.AddressDAO;
-import by.it.academy.adorop.dao.DepartmentDAO;
-import by.it.academy.adorop.dao.EmployeeDAO;
-import by.it.academy.adorop.dao.StudentDAO;
-import by.it.academy.adorop.entities.Address;
-import by.it.academy.adorop.entities.Department;
-import by.it.academy.adorop.entities.Employee;
-import by.it.academy.adorop.entities.Student;
+import by.it.academy.adorop.controller.utils.CommandsContextUtil;
 
 public class CommandsFactory {
+
+    public static final String SAVE_STUDENT = "1";
+    public static final String SAVE_EMPLOYEE = "2";
+    public static final String SAVE_DEPARTMENT = "3";
+    public static final String FIND_STUDENT = "4";
+    public static final String FIND_EMPLOYEE = "5";
+    public static final String FIND_DEPARTMENT = "6";
+    public static final String ADD_EMPLOYEE_TO_DEPARTMENT = "7";
+    public static final String DELETE_EMPLOYEE_FROM_DEPARTMENT = "8";
+    public static final String ADD_ADDRESS = "9";
+    public static final String EXIT = "10";
+
     private CommandsFactory() {
     }
 
@@ -18,44 +23,45 @@ public class CommandsFactory {
     }
 
     public static Command createCommand(String request) {
-        Command command;
+
+        String beanName;
 
         switch (request) {
-            case "1":
-                command = new SaveCommand<>(Student.class, StudentDAO.getInstance());
+            case SAVE_STUDENT:
+                beanName = "saveStudentCommand";
                 break;
-            case "2":
-                command = new SaveCommand<>(Employee.class, EmployeeDAO.getInstance());
+            case SAVE_EMPLOYEE:
+                beanName = "saveEmployeeCommand";
                 break;
-            case "3":
-                command = new SaveCommand<>(Department.class, DepartmentDAO.getInstance());
+            case SAVE_DEPARTMENT:
+                beanName = "saveDepartmentCommand";
                 break;
-            case "4":
-                command = new FindCommand<>(StudentDAO.getInstance());
+            case FIND_STUDENT:
+                beanName = "findStudentCommand";
                 break;
-            case "5":
-                command = new FindCommand<>(EmployeeDAO.getInstance());
+            case FIND_EMPLOYEE:
+                beanName = "findEmployeeCommand";
                 break;
-            case "6":
-                command = new FindCommand<>(DepartmentDAO.getInstance());
+            case FIND_DEPARTMENT:
+                beanName = "findDepartmentCommand";
                 break;
-            case "7":
-                command = new AddEmployeeToDepartmentCommand();
+            case ADD_EMPLOYEE_TO_DEPARTMENT:
+                beanName = "addEmployeeToDepartmentCommand";
                 break;
-            case "8":
-                command = new DeleteEmployeeFromDepartmentCommand();
+            case DELETE_EMPLOYEE_FROM_DEPARTMENT:
+                beanName = "deleteEmployeeFromDepartmentCommand";
                 break;
-            case "9":
-                command = new AddAddressCommand();
+            case ADD_ADDRESS:
+                beanName = "addAddressCommand";
                 break;
-            case "10":
-                command = new ExitCommand();
+            case EXIT:
+                beanName = "exitCommand";
                 break;
             default:
                 System.out.println("Should be a number from 1 to 10");
-                command = new ShowMenuCommand();
+                beanName = "showMenuCommand";
                 break;
         }
-        return command;
+        return CommandsContextUtil.getCommand(beanName);
     }
 }

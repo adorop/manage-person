@@ -1,6 +1,5 @@
 package by.it.academy.adorop.controller.utils;
 
-import by.it.academy.adorop.dao.utils.HibernateUtil;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -19,7 +18,6 @@ public class InputReader {
             return reader.readLine();
         } catch (IOException e) {
             System.out.println("Some problems with console");
-            HibernateUtil.realizeResources();
             System.exit(0);
             return null;
         }
