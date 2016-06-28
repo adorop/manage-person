@@ -1,7 +1,7 @@
 package by.it.academy.adorop.controller.commands;
 
 import by.it.academy.adorop.controller.commands.exceptions.NoSuchEntityException;
-import by.it.academy.adorop.dao.DAO;
+import by.it.academy.adorop.dao.impl.DAO;
 import by.it.academy.adorop.dao.exceptions.DaoException;
 import by.it.academy.adorop.entities.Department;
 import by.it.academy.adorop.entities.Employee;

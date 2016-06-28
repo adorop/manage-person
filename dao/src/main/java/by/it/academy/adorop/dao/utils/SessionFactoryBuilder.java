@@ -57,18 +57,21 @@ public class SessionFactoryBuilder {
     }
 
     private void setup(MetadataSources metadataSources) {
-        for (String resource : mappingResources) {
-            metadataSources.addResource(resource);
+        if (mappingResources != null) {
+            for (String resource : mappingResources) {
+                metadataSources.addResource(resource);
+            }
         }
     }
 
     private Map getHibernateSettings() {
         Map<String, String> settings = new HashMap<>();
-
-        Enumeration<?> propertyNames = hibernateSettings.propertyNames();
-        while (propertyNames.hasMoreElements()) {
-            String propertyName = (String) propertyNames.nextElement();
-            settings.put(propertyName, hibernateSettings.getProperty(propertyName));
+        if (hibernateSettings != null) {
+            Enumeration<?> propertyNames = hibernateSettings.propertyNames();
+            while (propertyNames.hasMoreElements()) {
+                String propertyName = (String) propertyNames.nextElement();
+                settings.put(propertyName, hibernateSettings.getProperty(propertyName));
+            }
         }
         return settings;
     }

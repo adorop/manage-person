@@ -1,4 +1,4 @@
-package by.it.academy.adorop.dao;
+package by.it.academy.adorop.dao.impl;
 
 import by.it.academy.adorop.entities.Student;
 

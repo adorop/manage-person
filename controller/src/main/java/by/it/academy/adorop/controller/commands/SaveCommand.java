@@ -1,7 +1,7 @@
 package by.it.academy.adorop.controller.commands;
 
 import by.it.academy.adorop.controller.utils.FromConsoleBuilder;
-import by.it.academy.adorop.dao.DAO;
+import by.it.academy.adorop.dao.impl.DAO;
 import by.it.academy.adorop.dao.exceptions.DaoException;
 
 public class SaveCommand<T> extends Command {

@@ -3,7 +3,7 @@ package by.it.academy.adorop.controller.commands;
 import by.it.academy.adorop.controller.commands.exceptions.NoSuchEntityException;
 import by.it.academy.adorop.controller.utils.FromConsoleBuilder;
 import by.it.academy.adorop.controller.utils.InputReader;
-import by.it.academy.adorop.dao.DAO;
+import by.it.academy.adorop.dao.impl.DAO;
 import by.it.academy.adorop.dao.exceptions.DaoException;
 import by.it.academy.adorop.entities.Address;
 import by.it.academy.adorop.entities.Person;

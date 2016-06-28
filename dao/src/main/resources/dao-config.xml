@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -38,14 +40,28 @@
 
     <bean id="session" factory-bean="sessionFactory" factory-method="openSession" destroy-method="close"/>
 
-    <bean id="basicDAO" class="by.it.academy.adorop.dao.BasicDAO" abstract="true" >
+    <bean id="transactionManager" class="by.it.academy.adorop.dao.utils.TransactionManager">
         <property name="session" ref="session"/>
     </bean>
 
-    <bean id="studentDAO" class="by.it.academy.adorop.dao.StudentDAO" parent="basicDAO"/>
-    <bean id="addressDAO" class="by.it.academy.adorop.dao.AddressDAO" parent="basicDAO"/>
-    <bean id="departmentDAO" class="by.it.academy.adorop.dao.DepartmentDAO" parent="basicDAO"/>
-    <bean id="employeeDAO" class="by.it.academy.adorop.dao.EmployeeDAO" parent="basicDAO"/>
-    <bean id="personDAO" class="by.it.academy.adorop.dao.PersonDAO" parent="basicDAO"/>
+    <aop:config>
+        <aop:pointcut id="transactional" expression="this(by.it.academy.adorop.dao.impl.DAO))"/>
+        <aop:aspect ref="transactionManager">
+            <aop:before method="beginTransaction" pointcut-ref="transactional"/>
+            <aop:after-returning method="commitTransaction" pointcut-ref="transactional"/>
+            <aop:after-throwing method="rollBackTransaction" pointcut-ref="transactional"/>
+        </aop:aspect>
+
+    </aop:config>
+
+    <bean id="basicDAO" class="by.it.academy.adorop.dao.impl.BasicDAO" abstract="true" >
+        <property name="session" ref="session"/>
+    </bean>
+
+    <bean id="studentDAO" class="by.it.academy.adorop.dao.impl.StudentDAO" parent="basicDAO"/>
+    <bean id="addressDAO" class="by.it.academy.adorop.dao.impl.AddressDAO" parent="basicDAO"/>
+    <bean id="departmentDAO" class="by.it.academy.adorop.dao.impl.DepartmentDAO" parent="basicDAO"/>
+    <bean id="employeeDAO" class="by.it.academy.adorop.dao.impl.EmployeeDAO" parent="basicDAO"/>
+    <bean id="personDAO" class="by.it.academy.adorop.dao.impl.PersonDAO" parent="basicDAO"/>
 
 </beans>
